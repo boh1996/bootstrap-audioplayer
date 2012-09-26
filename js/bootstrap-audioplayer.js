@@ -36,6 +36,18 @@
       var playback = this.$element.find("div.playback");
       var volume = this.$element.find("div.volume");
 
+      this.$element.find("span.song-progress").live("change",$.proxy(function(){
+        if (this.$audio.src != "") {
+          this.$audio.pause();
+          this.changeTime($(event.target).val() * (this.$audio.duration / 100));
+        }
+      },this));
+
+      $(this.$audio).on("timeupdate",$.proxy(function(){
+        var progress = this.$audio.currentTime / this.$audio.duration * 100;
+        if (this.$element.find("span.song-progress").length > 0 && progress != "NaN") this.$element.find('span.song-progress input[type="range"]').val(Math.round(progress));
+      },this));
+
       if (this.$audio.paused)
         this.$element.find("div.playback button.playback-play i:first").addClass("icon-play").removeClass("icon-pause");
       else
@@ -65,7 +77,20 @@
 
       //On done event
       $(this.$audio).bind('ended', $.proxy(function(){
-        this.$element.find("div.playback button.playback-play i:first").addClass("icon-play").removeClass("icon-pause");
+        if (this.songs.length > 1 && (this.loop | this.shuffle)){
+          console.log("Replay");
+          if (this.shuffle) {
+            this.shuffle();
+          } else {
+            if (this.songs.length-1 == this.currentSong && this.loop) {
+              this.next();
+            } else {
+              this.pause();
+            }
+          }
+        } else { 
+          this.pause();
+        }
       },this));
       
       //Pause/Play
@@ -81,6 +106,20 @@
         }
       },this));
     }
+  }
+
+  AudioPlayer.prototype._randomSong = function () {
+    var randVal = Math.random()*$(this.songs).length;
+    var newSong = Math.round(randVal.toFixed($(this.songs).length));
+    if (newSong > 0) newSong = newSong-1;
+    return newSong;
+  }
+
+  AudioPlayer.prototype.shuffle = function () {
+    var newSong = this._randomSong();
+    while (newSong == this.currentSong)
+      newSong = this._randomSong();
+    this.play(newSong);
   }
 
   AudioPlayer.prototype.volume = function (volume) {
@@ -118,6 +157,13 @@
        newSong++;
       this.change(newSong);
       if (!paused) this.play(newSong);     
+    }
+  }
+
+  AudioPlayer.prototype.changeTime = function (time) {
+    if (this.$audio.src != "" && time <= this.$audio.duration) {
+      this.$audio.currentTime = time;
+      this.$audio.play();
     }
   }
 
@@ -165,7 +211,8 @@
   $.fn.audioplayer.Constructor = AudioPlayer
 
   $.fn.audioplayer.defaults = {
-    offset: 0
+    loop : false,
+    shuffle : false,
   }
 
 
