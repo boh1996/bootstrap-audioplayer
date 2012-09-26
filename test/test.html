@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel='stylesheet/less' type='text/css' href='less/audioplayer.less'/>
+    <link rel='stylesheet' type='text/css' href='bootstrap/css/bootstrap.min.css'/>
+    <script type='text/javascript' src='http://lesscss.googlecode.com/files/less-1.3.0.min.js'></script>
+  </head>
+  <body>
+
+    <div class='container'>
+      <div class='row'>
+        <div class='span4'>
+          <div class='ap'>
+            <audio></audio>
+            <div class='cover-art' style='text-align:center'>
+              <img src='img/no-album-art.png' />
+            </div>
+            <div class="audioplayer-toolbar">
+              <!--<p class='track-info'>-->
+              <span class="song-progress">
+                <input type="range" min="0" max="100" value="0" data-highlight='true' />
+              </span>
+              <span class="timeleft"></span>
+              <!--</p>-->
+              <div class="btn-toolbar">
+                <div class='playback btn-group'>
+                  <button class='playback-prev btn' ><i class='icon-step-backward'></i></button>
+                  <button class='playback-play btn' ><i class='icon-play'></i></button>
+                  <button class='playback-next btn' ><i class='icon-step-forward'></i></button>
+                </div>
+                <div class='volume btn-group'>
+                  <button class='volume-down btn' ><i class='icon-volume-down'></i></button>
+                  <button class='volume-up btn' ><i class='icon-volume-up'></i></button>
+                  <button class='volume-mute btn' ><i class='icon-volume-off'></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type='text/javascript' src='http://code.jquery.com/jquery-1.7.2.min.js'></script>
+    <script type='text/javascript' src='bootstrap/js/bootstrap.min.js'></script>
+    <script type='text/javascript' src='../js/bootstrap-audioplayer.js'></script>
+
+      <script type="text/javascript">
+        $(".ap").audioplayer({
+          songs : ["music/Battlefield 1942.mp3","music/Battlefield 1943.mp3","music/Battlefield 3 Main Theme.mp3"]
+        });
+    </script>
+
+    <style type="text/css">
+      .container {
+        margin-left: auto;
+        margin-right: auto;
+        width: 300px;
+        height: 322px;
+      }
+      .audioplayer-toolbar {
+        width: auto;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </body>
+</html>
